@@ -68,8 +68,11 @@ certificate() { # certificate <directory> <ca file> <certificate file> <key file
     -subj "/CN=throwaway authority" -keyout "$1/ca.key" -out "$1/$2" 2>/dev/null
   openssl req -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes \
     -subj "/CN=first-bite example-harbour" -keyout "$1/$4" -out "$1/request.csr" 2>/dev/null
+  # An extension file makes a version 3 certificate on every OpenSSL; without one,
+  # OpenSSL 3.0 (Ubuntu 22.04 and 24.04) makes version 1, which TLS libraries refuse.
+  printf 'basicConstraints=CA:FALSE\nkeyUsage=digitalSignature\nextendedKeyUsage=clientAuth\n' >"$1/extensions.cnf"
   openssl x509 -req -days 1 -in "$1/request.csr" -CA "$1/$2" -CAkey "$1/ca.key" \
-    -CAcreateserial -out "$1/$3" 2>/dev/null
+    -CAcreateserial -extfile "$1/extensions.cnf" -out "$1/$3" 2>/dev/null
 }
 certificate "$etc/tls" ca.pem client.pem client.key
 certificate "$etc/tak" truststore.pem first-bite.pem first-bite.key
