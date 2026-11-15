@@ -1,0 +1,74 @@
+{
+    "description": "Sent every hour, and at once when a fault is raised.",
+    "source": {
+        "section": "5.3",
+        "table": "5-3"
+    },
+    "declared_bits": 48,
+    "fields": {
+        "message_id": {
+            "start": 0,
+            "stop": 8,
+            "unit": "1",
+            "description": "Identifies the message. See Table 5-1.",
+            "source": {
+                "section": "4",
+                "table": "4-1"
+            }
+        },
+        "message_length": {
+            "start": 8,
+            "stop": 16,
+            "unit": "words",
+            "description": "Length of the message in 16-bit words.",
+            "source": {
+                "section": "4",
+                "table": "4-1"
+            }
+        },
+        "gauge_number": {
+            "start": 16,
+            "stop": 24,
+            "unit": "1",
+            "description": "Gauge that sent the message, 1 to 200.",
+            "source": {
+                "section": "4",
+                "table": "4-1"
+            }
+        },
+        "sequence_number": {
+            "start": 24,
+            "stop": 32,
+            "unit": "1",
+            "description": "Incremented by the gauge for each message; wraps from 255 to 0.",
+            "source": {
+                "section": "4",
+                "table": "4-1"
+            }
+        },
+        "pump_fault": {
+            "start": 32,
+            "stop": 33,
+            "type": "bool",
+            "description": "1 when the stilling-well pump has failed."
+        },
+        "datum_check_due": {
+            "start": 33,
+            "stop": 34,
+            "type": "bool",
+            "description": "1 when the datum check is due.",
+            "note": "Due or overdue is not said: icd-notes/issues.md ISSUE-002."
+        },
+        "spare_34": {
+            "start": 34,
+            "stop": 40
+        },
+        "supply_voltage": {
+            "start": 40,
+            "stop": 48,
+            "scale": 0.1,
+            "unit": "V",
+            "description": "Voltage of the gauge's supply."
+        }
+    }
+}

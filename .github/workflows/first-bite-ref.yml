@@ -1,0 +1,58 @@
+name: first-bite-ref
+
+# first-bite.ref names one full commit sha, and that commit is on
+# USAREUR-AF/first-bite main (main's head or an ancestor of it). A commit only
+# on a branch, a fork or a pull request, or one main no longer contains, is
+# refused.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  on-first-bite-main:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      FIRST_BITE_URL: https://github.com/USAREUR-AF/first-bite
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: first-bite.ref is on first-bite main
+        run: |
+          set -euo pipefail
+          if [ ! -f first-bite.ref ]; then
+            echo "::error::this overlay has no first-bite.ref"
+            exit 1
+          fi
+          ref="$(tr -d '[:space:]' < first-bite.ref)"
+          if ! [[ "$ref" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error file=first-bite.ref::first-bite.ref must hold one full 40-character commit sha, found '$ref'"
+            exit 1
+          fi
+          repo="$RUNNER_TEMP/first-bite"
+          git init -q "$repo"
+          # Commits only, no trees or blobs: enough to answer ancestry.
+          git -C "$repo" fetch -q --filter=tree:0 "$FIRST_BITE_URL" "+refs/heads/main:refs/remotes/origin/main"
+          head="$(git -C "$repo" rev-parse refs/remotes/origin/main)"
+          if ! git -C "$repo" cat-file -e "${ref}^{commit}" 2>/dev/null; then
+            echo "::error file=first-bite.ref::$ref is not a commit on first-bite main (main is at $head)"
+            exit 1
+          fi
+          if ! git -C "$repo" merge-base --is-ancestor "$ref" "$head"; then
+            echo "::error file=first-bite.ref::$ref is not an ancestor of first-bite main ($head)"
+            exit 1
+          fi
+          behind="$(git -C "$repo" rev-list --count "$ref..$head")"
+          echo "ok: first-bite.ref $ref is on first-bite main; main is $behind commit(s) ahead at $head"

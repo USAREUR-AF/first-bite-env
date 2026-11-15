@@ -1,0 +1,18 @@
+{
+    "name": "tide-gauge",
+    "version": "0.1.0",
+    "description": "Synthetic example: a tide gauge reporting to its harbour office, transcribed from the invented document TG-ICD-002 in documents/.",
+    "source": {
+        "document": "TG-ICD-002",
+        "revision": "B"
+    },
+    "lint": {
+        "allow": [
+            {
+                "rule": "C004",
+                "at": "TIDE/Calibration Record",
+                "reason": "Defined in TG-CAL-003, which is not transcribed here (TG-ICD-002 Table 5-1)."
+            }
+        ]
+    }
+}

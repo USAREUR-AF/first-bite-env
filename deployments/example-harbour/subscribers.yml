@@ -1,0 +1,60 @@
+# The sinks of the first-bite service at example-harbour, an invented site:
+# /etc/first-bite/config/subscribers.yml on the capture host. Keys are
+# described in first-bite's flow/config/README.md; the security block in
+# docs/security/transport.md.
+#
+# No credential value is written here. A credential is a reference: ${NAME}
+# is read from the environment (first-bite.env), a *_file key names a file
+# that systemd hands the service with LoadCredential=
+# (first-bite.service.d/example-harbour.conf). Certificates and keys are
+# named by path.
+
+security:
+  # Every sink that leaves the host speaks TLS to a server whose certificate
+  # chains to ca_bundle (or, for the TAK stream, its own ca_file) and matches
+  # the endpoint's name.
+  transport: tls
+  min_tls: "1.3"
+  # Presented to a server that asks for a client certificate.
+  client_cert: /etc/first-bite/tls/client.pem
+  client_key: /etc/first-bite/tls/client.key
+  ca_bundle: /etc/first-bite/tls/ca.pem
+
+subscribers:
+  # Cursor-on-Target events from the buoys' Position messages, to the
+  # harbour's TAK server over its TLS streaming input, with the client
+  # certificate the TAK server's administrator issued.
+  - name: PositionsToTak
+    subscriber_type: tcp
+    zmq_url: "127.0.0.1"
+    zmq_port: 12000
+    topics:
+      - "BUOY/Position"
+    destinations:
+      - address: "203.0.113.40:8089"
+    tls:
+      ca_file: /etc/first-bite/tak/truststore.pem
+      client_cert_file: /etc/first-bite/tak/first-bite.pem
+      client_key_file: /etc/first-bite/tak/first-bite.key
+    queue: 1000
+    cot:
+      uid: [buoy_number]
+      type:
+        value: "a-n-S-X"
+      position:
+        geodetic: [latitude, longitude, antenna_height]
+      stale_minutes: 3
+
+  # Every BUOY record, over HTTPS to the harbour's S3-compatible archive.
+  - name: RecordsToArchive
+    subscriber_type: objectstorage
+    subtype: awsobject
+    zmq_url: "127.0.0.1"
+    zmq_port: 12000
+    topics:
+      - "BUOY/"
+    aws_access_key_id: "${HARBOUR_ARCHIVE_ACCESS_KEY_ID}"
+    aws_secret_access_key_file: "archive-secret-access-key"
+    aws_default_region: "us-east-1"
+    aws_s3_endpoint: "https://archive.harbour.example"
+    aws_bucket_name: "harbour-records"

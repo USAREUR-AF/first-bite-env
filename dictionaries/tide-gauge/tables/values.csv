@@ -1,0 +1,4 @@
+interface,message,field,value,label
+TIDE,Water Level,quality,0,Good
+TIDE,Water Level,quality,1,Suspect
+TIDE,Water Level,quality,2,Failed

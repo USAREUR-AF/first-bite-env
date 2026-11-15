@@ -1,0 +1,4 @@
+interface,message,type_id,defined,description,declared_bits,source_document,source_revision,source_section,source_table,source_page,note
+TIDE,Water Level,1,yes,Sent every six minutes with the mean water level of the last three minutes.,64,,,5.2,5-2,,
+TIDE,Gauge Status,2,yes,"Sent every hour, and at once when a fault is raised.",48,,,5.3,5-3,,
+TIDE,Calibration Record,3,no,,,,,,,,

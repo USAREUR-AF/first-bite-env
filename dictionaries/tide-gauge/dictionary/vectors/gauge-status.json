@@ -1,0 +1,17 @@
+{
+    "interface": "TIDE",
+    "payload_hex": "0203032c407e",
+    "expect": {
+        "message_type": "Gauge Status",
+        "fields": {
+            "message_id": "2",
+            "message_length": "3",
+            "gauge_number": "3",
+            "sequence_number": "44",
+            "pump_fault": "false",
+            "datum_check_due": "true",
+            "supply_voltage": "12.6"
+        }
+    },
+    "note": "TG-ICD-002 revision B, appendix A.3."
+}

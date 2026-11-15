@@ -1,0 +1,14 @@
+{
+    "interface": "TIDE",
+    "payload_hex": "0104032bff060000",
+    "expect": {
+        "message_type": "Water Level",
+        "fields": {
+            "gauge_number": "3",
+            "sequence_number": "43",
+            "water_level": "-0.25",
+            "quality": "Good"
+        }
+    },
+    "note": "TG-ICD-002 revision B, appendix A.2."
+}

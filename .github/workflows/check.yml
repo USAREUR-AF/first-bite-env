@@ -1,0 +1,68 @@
+name: check
+
+# The dictionary gates and the deployment example, with a first-bite release
+# pinned by version and checksum. The release must be of the commit in
+# first-bite.ref; the first step refuses one that is not.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+env:
+  # The first-bite release whose bite and mind run here, and the SHA-256 of
+  # its x86_64-linux-gnu archive, from that release's SHA256SUMS. Change both
+  # together with first-bite.ref.
+  FIRST_BITE_REPOSITORY: USAREUR-AF/first-bite
+  FIRST_BITE_VERSION: 1.1.0
+  FIRST_BITE_SHA256: 668172332f3b9560ab79b91aa488aa841b352b501c28dee68e3585b6d64675ef
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: The pinned release is of the commit in first-bite.ref
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ref="$(tr -d '[:space:]' < first-bite.ref)"
+          tagged="$(gh api "repos/${FIRST_BITE_REPOSITORY}/commits/v${FIRST_BITE_VERSION}" --jq .sha)"
+          if [ "$tagged" != "$ref" ]; then
+            echo "::error file=first-bite.ref::release v${FIRST_BITE_VERSION} is commit $tagged; first-bite.ref is $ref"
+            exit 1
+          fi
+          echo "ok: v${FIRST_BITE_VERSION} is $ref"
+
+      - name: Install the pinned bite and mind
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          archive="first-bite-${FIRST_BITE_VERSION}-x86_64-linux-gnu.tar.gz"
+          gh release download "v${FIRST_BITE_VERSION}" --repo "$FIRST_BITE_REPOSITORY" \
+            --pattern "$archive" --dir "$RUNNER_TEMP"
+          echo "${FIRST_BITE_SHA256}  ${RUNNER_TEMP}/${archive}" | sha256sum --check
+          tar -xzf "${RUNNER_TEMP}/${archive}" -C "$RUNNER_TEMP"
+          echo "${RUNNER_TEMP}/first-bite-${FIRST_BITE_VERSION}-x86_64-linux-gnu/deployment" >> "$GITHUB_PATH"
+
+      - run: bite --version && mind --version
+
+      - name: make check
+        run: make check
+
+      - name: The deployment example behaves as its README says
+        run: deployments/example-harbour/check.sh

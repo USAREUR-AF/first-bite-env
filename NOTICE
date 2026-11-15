@@ -1,0 +1,22 @@
+first-bite-env (part of goat)
+Copyright 2025-2026 U.S. Federal Government (in countries where recognized)
+
+Portions of this work written by U.S. Federal government employees within the
+scope of their federal employment are not subject to copyright protection in the
+United States (17 U.S.C. 105) and are in the public domain there. In countries
+where copyright protection is available, those portions are released under the
+Apache License, Version 2.0. Merged contributions from private contributors are
+released under the same License. See INTENT.md.
+
+This product is licensed
+under the Apache License, Version 2.0 (see LICENSE at the root of this
+repository).
+
+The harbour-buoy dictionary and its document, documents/HB-ICD-001-A.md, are
+copied from https://github.com/USAREUR-AF/hello-galaxy-first-bite, released
+under the same terms.
+
+The first-bite software this repository works with links third-party Rust
+crates under their own licenses; each first-bite release carries an SPDX
+software bill of materials that names every component and its license
+(https://github.com/USAREUR-AF/first-bite).

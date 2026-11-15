@@ -1,0 +1,73 @@
+{
+    "description": "Sent every six minutes with the mean water level of the last three minutes.",
+    "source": {
+        "section": "5.2",
+        "table": "5-2"
+    },
+    "declared_bits": 64,
+    "fields": {
+        "message_id": {
+            "start": 0,
+            "stop": 8,
+            "unit": "1",
+            "description": "Identifies the message. See Table 5-1.",
+            "source": {
+                "section": "4",
+                "table": "4-1"
+            }
+        },
+        "message_length": {
+            "start": 8,
+            "stop": 16,
+            "unit": "words",
+            "description": "Length of the message in 16-bit words.",
+            "source": {
+                "section": "4",
+                "table": "4-1"
+            }
+        },
+        "gauge_number": {
+            "start": 16,
+            "stop": 24,
+            "unit": "1",
+            "description": "Gauge that sent the message, 1 to 200.",
+            "source": {
+                "section": "4",
+                "table": "4-1"
+            }
+        },
+        "sequence_number": {
+            "start": 24,
+            "stop": 32,
+            "unit": "1",
+            "description": "Incremented by the gauge for each message; wraps from 255 to 0.",
+            "source": {
+                "section": "4",
+                "table": "4-1"
+            }
+        },
+        "water_level": {
+            "start": 32,
+            "stop": 48,
+            "type": "int",
+            "scale": 0.001,
+            "unit": "m",
+            "description": "Height of the water above chart datum.",
+            "note": "LSB 0.001 m, not the 0.01 m of Table 5-2: icd-notes/issues.md ISSUE-001."
+        },
+        "quality": {
+            "start": 48,
+            "stop": 50,
+            "values": {
+                "0": "Good",
+                "1": "Suspect",
+                "2": "Failed"
+            },
+            "description": "How far the measurement can be trusted."
+        },
+        "spare_50": {
+            "start": 50,
+            "stop": 64
+        }
+    }
+}

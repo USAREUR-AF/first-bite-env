@@ -1,0 +1,30 @@
+# The source document and anything extracted from it stay out of the repository
+# unless its handling allows a copy here. The documents in documents/ are
+# invented and written as Markdown.
+*.pdf
+*.docx
+*.doc
+icd-extract/
+
+# Captures of real traffic. examples/ holds captures built from a document's
+# example messages; first-bite's check-public-tree.sh allows them there only.
+*.pcap
+*.pcapng
+*.cap
+!examples/*.pcap
+
+# Spreadsheet lock and backup files.
+~$*
+.~lock.*
+*.bak
+.DS_Store
+
+# The pinned first-bite checkout and its build (make first-bite, make bite).
+.first-bite/
+
+# The leak check's name list, when it is copied into a checkout. Never committed.
+.leak-needles
+
+# Secrets, when this tree is used as a repository root. They are never committed.
+*.key
+*.age

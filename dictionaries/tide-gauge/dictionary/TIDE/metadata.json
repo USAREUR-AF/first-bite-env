@@ -1,0 +1,31 @@
+{
+    "description": "Tide gauge to harbour office: water level and gauge status.",
+    "source": {
+        "section": "2"
+    },
+    "protocol": {
+        "network": "ip",
+        "transport": "udp"
+    },
+    "port": 47300,
+    "icd_numbering": {
+        "word_bits": 16,
+        "bit0": "lsb",
+        "first_word": 1,
+        "first_bit": 0,
+        "word_order": "big"
+    },
+    "message_type": {
+        "start": 0,
+        "stop": 8,
+        "values": {
+            "1": "Water Level",
+            "2": "Gauge Status",
+            "3": "Calibration Record"
+        }
+    },
+    "message_length": {
+        "start": 8,
+        "stop": 16
+    }
+}

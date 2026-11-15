@@ -1,0 +1,9 @@
+# Who must review a change. Branch protection requires one approving review
+# from a code owner; the last matching line wins, so broad rules come first.
+# In a private overlay, a dictionary's owners are the people who hold its
+# source document and can check a transcription against it: one line per
+# dictionary.
+*                            @USAREUR-AF/goat-owners
+/dictionaries/harbour-buoy/  @USAREUR-AF/goat-owners
+/dictionaries/tide-gauge/    @USAREUR-AF/goat-owners
+/deployments/                @USAREUR-AF/goat-owners
