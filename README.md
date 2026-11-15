@@ -160,7 +160,7 @@ first-bite's [`tools/dictionary-repo-template`](https://github.com/USAREUR-AF/fi
 |---|---|
 | `make check` over both dictionaries, `bite` 0.2.0 of release 1.1.0 | measured: 0 failing on each; results in each dictionary's README |
 | `deployments/example-harbour/check.sh` | measured with `mind` 1.1.0: every expectation passed, on x86-64 Ubuntu and on macOS |
-| `make leak-check` | measured: passes |
+| leak check | measured: first-bite's `tools/check-public-tree.sh` at the pinned commit passes over this tree, with the full name list, 68 files; the `make leak-check` target is built and not run |
 | `actionlint`, `yamllint --strict .`, `shellcheck` | measured: clean |
 | `first-bite-ref`, `check`, `lint`, `leak-gate`, `contributor-trust` workflows | built; they run once the repository is on GitHub |
 
