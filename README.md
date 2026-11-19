@@ -1,12 +1,13 @@
-<h1 align="center">first-bite-env</h1>
+# first-bite-env
 
-<p align="center">
-  An example first-bite overlay, kept separate from the software it runs. A template repository.
-</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/figures/overlay-dark.svg">
+  <img src="docs/figures/overlay-light.svg" width="760" alt="A first-bite deployment is first-bite at a pinned commit plus an overlay: first-bite.ref pins first-bite commit d65b038 (release v1.1.0), whose bite checks the overlay's two invented dictionaries, harbour-buoy and tide-gauge, and whose mind runs its one invented site, example-harbour, which sends Cursor-on-Target to a TAK server and records to an archive over TLS 1.3. Every pull request runs check, contributor-trust, first-bite-ref, leak-gate and lint. A private overlay is made from this repository as a template, with the same shape.">
+</picture>
 
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License: Apache 2.0"></a>
-</p>
+An example first-bite overlay, kept separate from the software it runs. A template repository.
+
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 This is what a first-bite overlay looks like when it is written down: a repository that uses [`first-bite`](https://github.com/USAREUR-AF/first-bite) by pinned commit and holds what a deployment owns: its dictionaries and its configuration. A real deployment is first-bite at a pinned commit plus a private overlay with that deployment's dictionaries and configuration; this repository has the same shape, and every document, dictionary, address and name in it is invented.
 
